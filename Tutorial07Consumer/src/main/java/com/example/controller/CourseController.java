@@ -1,0 +1,46 @@
+package com.example.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.model.CourseModel;
+import com.example.model.StudentModel;
+import com.example.service.CourseService;
+import com.example.service.StudentService;
+
+@Controller
+public class CourseController {
+	
+	@Autowired
+    CourseService courseDAO;
+
+	
+	@RequestMapping("/course/view/{idCourse}")
+    public String viewCourse (Model model,
+            @PathVariable(value = "idCourse") String idCourse)
+    {
+        CourseModel course = courseDAO.selectCourse(idCourse);
+        model.addAttribute("title", "View Course");
+        if (course != null) {
+            model.addAttribute ("course", course);
+            return "view-course";
+        } else {
+            model.addAttribute ("id-course", idCourse);
+            return "course-not-found";
+        }
+    }
+	
+	/*@RequestMapping("/course/viewall")
+    public String viewall (Model model)
+    {
+        List<CourseModel> courses = courseDAO.selectAllCourses();
+        model.addAttribute ("courses", courses);
+        model.addAttribute("title", "View All Courses");
+        return "viewall";
+    }*/
+}
